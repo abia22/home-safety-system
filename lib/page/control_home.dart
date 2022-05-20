@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class ControlHome extends StatefulWidget {
@@ -12,6 +15,64 @@ class _ControlHomeState extends State<ControlHome> {
   bool blinds = false;
   bool alarm = false;
   bool secure = true;
+
+  late final DatabaseReference doorsRef;
+  late StreamSubscription<DatabaseEvent> doorsSubscription;
+
+  late final DatabaseReference blindsRef;
+  late StreamSubscription<DatabaseEvent> blindsSubscription;
+
+
+  @override
+  void initState() {
+    init();
+  }
+
+  init() async {
+    doorsRef = FirebaseDatabase.instance.ref('doors');
+    try{
+      final doorsSnapshot = await doorsRef.get();
+      doors = doorsSnapshot.value as bool;
+    } catch(err){
+      debugPrint(err.toString());
+    }
+
+    doorsSubscription = doorsRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        doors = (event.snapshot.value ?? false) as bool;
+      });
+    });
+
+    blindsRef = FirebaseDatabase.instance.ref('blinds');
+    try{
+      final blindsSnapshot = await blindsRef.get();
+      blinds = blindsSnapshot.value as bool;
+    } catch(err){
+      debugPrint(err.toString());
+    }
+
+    blindsSubscription = blindsRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        blinds = (event.snapshot.value ?? false) as bool;
+      });
+    });
+
+  }
+
+  changeDoors(bool state) async{
+    await doorsRef.set(state);
+  }
+
+  changeBlinds(bool state) async{
+    await blindsRef.set(state);
+  }
+
+  @override
+  void dispose() {
+    doorsSubscription.cancel();
+    blindsSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +128,7 @@ class _ControlHomeState extends State<ControlHome> {
                   value: doors,
                   onChanged: (bool state) {
                     setState(() {
-                      doors = state;
+                      changeDoors(state);
                     });
                   },
                 ),
@@ -113,7 +174,7 @@ class _ControlHomeState extends State<ControlHome> {
                     value: blinds,
                     onChanged: (bool state) {
                       setState(() {
-                        blinds = state;
+                        changeBlinds(state);
                       });
                     },
                   ),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "810917165",
+    "firebase_url": "https://scmu-b3a80-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "scmu-b3a80",
+    "storage_bucket": "scmu-b3a80.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810917165:android:dccabdf1f7218a7d5f47a4",
+        "android_client_info": {
+          "package_name": "com.example.security_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810917165-0dcolqorsjjmofarokc20inmb2avbe68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDe3kncZwDbZAnXqL-Jv6j5KVCeaJTw0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810917165-0dcolqorsjjmofarokc20inmb2avbe68.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "810917165-80180letb7gbu30ft7f2m6c1eslhbq05.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.securitySystem"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
