@@ -22,6 +22,9 @@ class _ControlHomeState extends State<ControlHome> {
   late final DatabaseReference blindsRef;
   late StreamSubscription<DatabaseEvent> blindsSubscription;
 
+  late final DatabaseReference secureRef;
+  late StreamSubscription<DatabaseEvent> secureSubscription;
+
 
   @override
   void initState() {
@@ -54,6 +57,20 @@ class _ControlHomeState extends State<ControlHome> {
     blindsSubscription = blindsRef.onValue.listen((DatabaseEvent event) {
       setState(() {
         blinds = (event.snapshot.value ?? false) as bool;
+      });
+    });
+
+    secureRef = FirebaseDatabase.instance.ref('blinds');
+    try{
+      final blindsSnapshot = await secureRef.get();
+      secure = blindsSnapshot.value as bool;
+    } catch(err){
+      debugPrint(err.toString());
+    }
+
+    secureSubscription = secureRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        secure = (event.snapshot.value ?? true) as bool;
       });
     });
 

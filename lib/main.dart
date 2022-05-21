@@ -2,14 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:security_system/page/control_home.dart';
 import 'package:security_system/page/invasion_history.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:security_system/services/notification_service.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(
+      MultiProvider(
+          providers: [
+            Provider<NotificationService>(
+              create: (context) => NotificationService(),
+            ),
+            // Provider<FirebaseMessagingService>(
+            //   create: (context) => FirebaseMessagingService(context.read<NotificationService>()),
+            // ),
+          ],
+          child: const MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
