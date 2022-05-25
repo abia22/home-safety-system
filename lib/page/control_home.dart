@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class ControlHome extends StatefulWidget {
@@ -25,6 +26,7 @@ class _ControlHomeState extends State<ControlHome> {
   late final DatabaseReference secureRef;
   late StreamSubscription<DatabaseEvent> secureSubscription;
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -60,7 +62,7 @@ class _ControlHomeState extends State<ControlHome> {
       });
     });
 
-    secureRef = FirebaseDatabase.instance.ref('blinds');
+    secureRef = FirebaseDatabase.instance.ref('secure');
     try{
       final blindsSnapshot = await secureRef.get();
       secure = blindsSnapshot.value as bool;

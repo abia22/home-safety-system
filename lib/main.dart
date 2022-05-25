@@ -1,7 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:security_system/page/control_home.dart';
 import 'package:security_system/page/invasion_history.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:security_system/services/firebase_messaging_service.dart';
 import 'package:security_system/services/notification_service.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +21,9 @@ void main() async{
             Provider<NotificationService>(
               create: (context) => NotificationService(),
             ),
-            // Provider<FirebaseMessagingService>(
-            //   create: (context) => FirebaseMessagingService(context.read<NotificationService>()),
-            // ),
+             Provider<FirebaseMessagingService>(
+               create: (context) => FirebaseMessagingService(context.read<NotificationService>()),
+            ),
           ],
           child: const MyApp(),
       ),
@@ -46,6 +48,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
   final screens = [ControlHome(), InvasionHistory()];
+
+
+  @override
+  void initState() {
+    super.initState();
+    initalizeFirebaseMessaging();
+    checkNotifications();
+  }
+
+  checkNotifications() async {
+    await Provider.of<NotificationService>(context, listen: false).checkForNotifications();
+  }
+  initalizeFirebaseMessaging() async{
+    await Provider.of<FirebaseMessagingService>(context, listen: false).initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,32 +91,6 @@ class _MainPageState extends State<MainPage> {
       ),
     )
     );
-
-    /*return MaterialApp(
-      title: 'Security System',
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-              title: const Text('Security System')
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: currentIndex,
-            onTap: (index) => currentIndex = index,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Control Home'
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.access_time_filled),
-                  label: 'Invasion History'
-              ),
-            ],
-          ),
-        ),
-      ),
-    );*/
   }
 }
 
