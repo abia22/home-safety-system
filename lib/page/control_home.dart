@@ -103,6 +103,10 @@ class _ControlHomeState extends State<ControlHome> {
     await blindsRef.set(state);
   }
 
+  changeAlarm(bool state) async{
+    await alarmRef.set(state);
+  }
+
   @override
   void dispose() {
     doorsSubscription.cancel();
@@ -248,7 +252,7 @@ class _ControlHomeState extends State<ControlHome> {
                 value: alarm,
                 onChanged: (bool state) {
                   setState(() {
-                    alarm = state;
+                    changeAlarm(state);
                   });
                 },
               ),
