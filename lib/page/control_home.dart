@@ -26,6 +26,9 @@ class _ControlHomeState extends State<ControlHome> {
   late final DatabaseReference secureRef;
   late StreamSubscription<DatabaseEvent> secureSubscription;
 
+  late final DatabaseReference alarmRef;
+  late StreamSubscription<DatabaseEvent> alarmSubscription;
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
@@ -73,6 +76,20 @@ class _ControlHomeState extends State<ControlHome> {
     secureSubscription = secureRef.onValue.listen((DatabaseEvent event) {
       setState(() {
         secure = (event.snapshot.value ?? true) as bool;
+      });
+    });
+
+    alarmRef = FirebaseDatabase.instance.ref('alarm');
+    try{
+      final alarmSnapshot = await alarmRef.get();
+      alarm = alarmSnapshot.value as bool;
+    } catch(err){
+      debugPrint(err.toString());
+    }
+
+    alarmSubscription = alarmRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        alarm = (event.snapshot.value ?? false) as bool;
       });
     });
 
