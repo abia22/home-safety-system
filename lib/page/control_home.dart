@@ -105,6 +105,9 @@ class _ControlHomeState extends State<ControlHome> {
 
   changeAlarm(bool state) async{
     await alarmRef.set(state);
+    if(!state && !secure) {
+      await secureRef.set(true);
+    }
   }
 
   @override
